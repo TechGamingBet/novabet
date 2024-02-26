@@ -62,10 +62,9 @@
         <div v-if="setting" class="mt-5 flex flex-col justify-start ">
             <p class="text-[12px] w-full">© {{ year }} {{ setting.software_name }} {{ $t('All rights reserved') }}.</p>
             <p class="flex text-[10px] md:text-[12px]  w-full">
-<!--                <strong>❤️ Developed by</strong>-->
-<!--                <a href="https://www.instagram.com/victormsalatiel/" target="_blank" class="ml-2 dark:text-gray-500 dark:hover:text-white transition duration-700 cursor-pointer">-->
-<!--                    Victor Salatiel-->
-<!--                </a>-->
+            casinopix - Melhor lugar para você lucrar is operated by Vegas, company registration number 150731, with registered address at Groot Kwartierweg 10, Curaçao and is licensed and authorized by the Government of Curacao and operates under the Master License of Gaming Services Provider, N.V. #365/JAZ License Number: GLH-OCCHKTW0709172018. Payment agent company is Horangi Trading Limited with address Chytron, 30, 2nd floor, Flat/Office A22, 1075, Nicosia, Cyprus and Registration number: HE 411494.
+            <br/>
+            Gambling can be addictive. Please play responsibly. Betfyre only accepts customers over 18 years of age.
             </p>
         </div>
     </div>
