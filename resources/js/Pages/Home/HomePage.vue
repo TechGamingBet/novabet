@@ -74,6 +74,20 @@
                     </div>
                 </div>
 
+                <!-- categories -->
+                <div v-if="categories" class="category-list">
+                    <div class="flex mb-5 gap-4" style="max-height: 200px; overflow-x: auto; overflow-y: hidden;">
+                        <div class="flex flex-row justify-between items-center w-full" style="min-width: 100%; white-space: nowrap;">
+                            <RouterLink :to="{ name: 'casinosAll', params: { provider: 'all', category: category.slug }}" v-for="(category, index) in categories" class="flex flex-col justify-center items-center min-w-[80px] text-center">
+                                <div class="category-img">
+                                    <img :src="`/storage/`+category.image" alt="" width="35" class="">
+                                </div>
+                                <p class="mt-3">{{ $t(category.name) }}</p>
+                            </RouterLink>
+                        </div>
+                    </div>
+                </div>
+
                 <div v-if="featured_games">
                     <div class="w-full flex justify-between mb-4">
                         <h2 class="text-xl font-bold">{{ $t('Featured') }}</h2>

@@ -134,8 +134,6 @@ class LayoutCssCustom extends Page implements HasForms
 
                 Section::make('Customização')
                     ->schema([
-
-
                         ColorPicker::make('primary_color')
                             ->label('Primary Color')
                             ->required(),

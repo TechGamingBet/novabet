@@ -21,7 +21,6 @@ trait KaGamingTrait
         return hash_hmac('sha256', json_encode($requestData), self::$KAGAMING_SECRET_KEY);
     }
 
-
     /**
      * Game Launch
      *
