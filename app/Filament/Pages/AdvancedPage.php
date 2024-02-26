@@ -17,6 +17,7 @@ use Filament\Pages\Page;
 use Filament\Support\Exceptions\Halt;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Jackiedo\DotenvEditor\Facades\DotenvEditor;
@@ -42,6 +43,7 @@ class AdvancedPage extends Page implements HasForms
     protected static ?string $slug = 'advanced-options';
 
     public ?array $data = [];
+    public $output;
 
     /**
      * @dev @victormsalatiel
@@ -113,7 +115,11 @@ class AdvancedPage extends Page implements HasForms
     {
         return $form
             ->schema([
-                FileUpload::make('update')
+                Section::make('Atualização')
+                    ->description('Carregue aqui seu arquivo de atualização no formato zip')
+                    ->schema([
+                        FileUpload::make('update')
+                    ])
 
             ])
             ->statePath('data');
@@ -126,7 +132,28 @@ class AdvancedPage extends Page implements HasForms
     {
         try {
             foreach ($this->data['update'] as $file) {
-                dd($file);
+                $extension  = $file->extension();
+                if($extension === "zip") {
+                    $filePath = $file->storeAs('updates', $file->getClientOriginalName());
+
+                    $zip = new \ZipArchive;
+                    $zipPath = storage_path("app/{$filePath}"); // Caminho completo para o arquivo zip
+                    $extractPath = base_path(); // Altere para o diretório desejado
+
+                    if ($zip->open($zipPath) === true) {
+                        $zip->extractTo($extractPath);
+                        $zip->close();
+
+                        // Exclua o arquivo zip após a extração
+                        \Storage::delete($filePath);
+                    }
+                }
+
+                Notification::make()
+                    ->title('Sucesso')
+                    ->body('Atualização feita com sucesso')
+                    ->success()
+                    ->send();
             }
         } catch (Halt $exception) {
             Notification::make()
@@ -135,5 +162,45 @@ class AdvancedPage extends Page implements HasForms
                 ->danger()
                 ->send();
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function runMigrate()
+    {
+        // Executar o comando Artisan para rodar as migrations
+        Artisan::call('migrate');
+
+        // Você também pode adicionar a opção '--seed' para rodar os seeders, se necessário
+        // Artisan::call('migrate --seed');
+
+        // Obter a saída do comando, se necessário
+        $this->output = Artisan::output();
+        Notification::make()
+            ->title('Sucesso')
+            ->body('Migrações carregadas com sucesso')
+            ->success()
+            ->send();
+    }
+
+    /**
+     * @return void
+     */
+    public function runMigrateWithSeed()
+    {
+        // Executar o comando Artisan para rodar as migrations
+        Artisan::call('migrate --seed');
+
+        // Você também pode adicionar a opção '--seed' para rodar os seeders, se necessário
+        // Artisan::call('migrate --seed');
+
+        // Obter a saída do comando, se necessário
+        $this->output = Artisan::output();
+        Notification::make()
+            ->title('Sucesso')
+            ->body('Migrações carregadas com sucesso')
+            ->success()
+            ->send();
     }
 }

@@ -22,14 +22,19 @@ class MyBetsTableWidget extends BaseWidget
 
     protected int | string | array $columnSpan = 'full';
 
+    public User $record;
+    
+
     /**
      * @param Table $table
      * @return Table
      */
     public function table(Table $table): Table
     {
+        // \Log::info('DADOS XXXXXXXXXXX ' . json_encode($this->record->id));
+
         return $table
-            ->query(Order::query()->where('user_id', auth()->id()))
+            ->query(Order::query()->where('user_id', $this->record->id))
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('game')
