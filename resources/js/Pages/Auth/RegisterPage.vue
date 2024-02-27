@@ -241,7 +241,6 @@ export default {
                         };
 
                         _this.router.push({ name: 'profileDeposit' });
-                        _toast.success(_this.$t('Your account has been created successfully'));
                     }
 
                     _this.isLoading = false;
