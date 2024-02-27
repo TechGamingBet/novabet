@@ -309,7 +309,7 @@ trait SalsaGamesTrait
                         $changeBonus = 'balance_bonus';
                         \Log::info('TIPO: '. $changeBonus);
 
-                    }elseif($wallet->balance >= $bet) {
+                    }elseif($wallet->total_balance >= $bet) {
                         $wallet->decrement('balance', floatval($betAmount / 100));
                         $changeBonus = 'balance';
                         \Log::info('TIPO: '. $changeBonus);
@@ -420,7 +420,7 @@ trait SalsaGamesTrait
                         Helper::generateGameHistory(
                             $wallet->user_id,
                             'win',
-                            $result_bet,
+                            $WinAmount,
                             $transaction->amount,
                             $transaction->getAttributes()['type_money'],
                             $transaction->transaction_id

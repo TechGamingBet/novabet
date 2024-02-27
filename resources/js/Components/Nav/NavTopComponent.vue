@@ -226,20 +226,6 @@
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-300 mb-6">Novo por aqui? <a href="" @click.prevent="hideLoginShowRegisterToggle"><strong>Criar conta</strong></a></p>
                     </form>
-
-                    <div class="login-wrap mt-5">
-                        <div class="line-text">
-                            <div class="l"></div>
-                            <div class="t">{{ $t('Log in directly with') }}</div>
-                            <div class="l"></div>
-                        </div>
-
-                        <div class="social-group mt-3">
-                            <a :href="redirectSocialTo()" class="text-green-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800">
-                                <i class="fa-brands fa-google"></i>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -362,17 +348,9 @@
                         </div>
 
                         <hr class="mb-3 mt-2 dark:border-gray-600">
-
-                        <div class="mb-3 mt-11">
-                            <div class="flex">
-                                <input id="link-checkbox" v-model="registerForm.term_a" name="term_a" required type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $t('I agree to the User Agreement & confirm I am at least 18 years old') }}</label>
-                            </div>
-                        </div>
-
                         <div class="mb-3">
                             <div class="flex items-center">
-                                <input id="link-checkbox-b" v-model="registerForm.agreement" name="term_b" required type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input id="link-checkbox-b" type="hidden" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label for="link-checkbox-b" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $t('I agree with the') }} <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">{{ $t('terms and conditions') }}</a>.</label>
                             </div>
                         </div>
@@ -383,20 +361,6 @@
                             </button>
                         </div>
                     </form>
-
-                    <div class="login-wrap mt-5">
-                        <div class="line-text">
-                            <div class="l"></div>
-                            <div class="t">{{ $t('Register with your social networks') }}</div>
-                            <div class="l"></div>
-                        </div>
-
-                        <div class="social-group mt-3">
-                            <a :href="redirectSocialTo()" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800">
-                                <i class="fa-brands fa-google"></i>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -740,7 +704,6 @@ export default {
 
                         _this.modalRegister.toggle();
                         _this.router.push({ name: 'profileDeposit' });
-                        _toast.success(_this.$t('Your account has been created successfully'));
                     }
 
                     _this.isLoadingRegister = false;

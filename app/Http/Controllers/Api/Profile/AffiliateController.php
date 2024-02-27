@@ -8,6 +8,7 @@ use App\Models\AffiliateWithdraw;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AffiliateController extends Controller
 {
@@ -75,6 +76,33 @@ class AffiliateController extends Controller
      */
     public function makeRequest(Request $request)
     {
+        $rules = [
+            'amount'   => 'required',
+            'pix_type' => 'required',
+        ];
+
+        switch ($request->pix_type) {
+            case 'document':
+                $rules['pix_key'] = 'required|cpf_ou_cnpj';
+                break;
+            case 'email':
+                $rules['pix_key'] = 'required|email';
+                break;
+            case 'phoneNumber':
+                $rules['pix_key'] = 'required|telefone';
+                break;
+            default:
+                $rules['pix_key'] = 'required';
+                break;
+
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
         $comission = auth('api')->user()->wallet->refer_rewards;
 
         if(floatval($comission) >= floatval($request->amount)) {

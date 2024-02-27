@@ -339,7 +339,18 @@ trait Games2ApiTrait
                 self::CheckMissionExist($request->user_code, $game, 'fivers');
 
                 $winMoney = (floatval($data['slot']['win_money']) - floatval($data['slot']['bet_money']));
-                return self::PrepareTransactionsGames2($wallet, $request->user_code, $data['slot']['txn_id'], $data['slot']['bet_money'], $winMoney, $data['slot']['game_code'], $data['slot']['provider_code']);
+                $transactions = self::PrepareTransactionsGames2($wallet, $request->user_code, $data['slot']['txn_id'], $data['slot']['bet_money'], $winMoney, $data['slot']['game_code'], $data['slot']['provider_code']);
+
+                if($transactions) {
+                    return response()->json([
+                        'status' => 1,
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'msg' => 'INSUFFICIENT_USER_FUNDS'
+                    ]);
+                }
             }
 
             if($data['game_type'] == 'live' &&  isset($data['live'])) {
@@ -348,7 +359,17 @@ trait Games2ApiTrait
                 /// verificar se usuário tem desafio ativo
                 self::CheckMissionExist($request->user_code, $game, 'fivers');
 
-                return self::PrepareTransactionsGames2($wallet, $request->user_code, $data['live']['txn_id'], $data['live']['bet_money'], $data['live']['win_money'], $data['live']['game_code'], $data['live']['provider_code']);
+                $transactions = self::PrepareTransactionsGames2($wallet, $request->user_code, $data['live']['txn_id'], $data['live']['bet_money'], $data['live']['win_money'], $data['live']['game_code'], $data['live']['provider_code']);
+                if($transactions) {
+                    return response()->json([
+                        'status' => 1,
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'msg' => 'INSUFFICIENT_USER_FUNDS'
+                    ]);
+                }
             }
         }
     }
@@ -384,35 +405,41 @@ trait Games2ApiTrait
         }elseif($wallet->balance_withdrawal >= $bet) {
             $wallet->decrement('balance_withdrawal', $bet); /// retira do saldo liberado pra saque
             $changeBonus = 'balance_withdrawal'; /// define o tipo de transação
+        }else{
+            return false;
         }
 
         if(floatval($winMoney) > $bet) {
             $typeAction = 'win';
-            self::CreateTransactionsGames2($userCode, time(), $txnId, $typeAction, $changeBonus, $betMoney, $gameCode, $gameCode);
+            $transaction = self::CreateTransactionsGames2($userCode, time(), $txnId, $typeAction, $changeBonus, $betMoney, $gameCode, $gameCode);
 
-            /// salvar transação GGR
-            GGRGamesFiver::create([
-                'user_id' => $userCode,
-                'provider' => $providerCode,
-                'game' => $gameCode,
-                'balance_bet' => $betMoney,
-                'balance_win' => $winMoney,
-                'currency' => $wallet->currency
-            ]);
+            if(!empty($transaction)) {
+                /// salvar transação GGR
+                GGRGamesFiver::create([
+                    'user_id' => $userCode,
+                    'provider' => $providerCode,
+                    'game' => $gameCode,
+                    'balance_bet' => $betMoney,
+                    'balance_win' => $winMoney,
+                    'currency' => $wallet->currency
+                ]);
 
-            /// pagar afiliado
-            Helper::generateGameHistory($user->id, $typeAction, $winMoney, $betMoney, $gameCode, $changeBonus, $providerCode, 'fivers');
+                /// pagar afiliado
+                Helper::generateGameHistory($user->id, $typeAction, $winMoney, $betMoney, $changeBonus, $txnId);
 
-            return response()->json([
-                'status' => 1,
-                'user_balance' => $wallet->total_balance
-            ]);
+                return response()->json([
+                    'status' => 1,
+                    'user_balance' => $wallet->total_balance
+                ]);
+            }
+
+
         }
 
         /// criar uma transação
         $checkTransaction = Order::where('transaction_id', $txnId)->first();
         if(empty($checkTransaction)) {
-            self::CreateTransactionsGames2($userCode, time(), $txnId, $typeAction, $changeBonus, $betMoney, $gameCode, $gameCode);
+            $checkTransaction = self::CreateTransactionsGames2($userCode, time(), $txnId, $typeAction, $changeBonus, $betMoney, $gameCode, $gameCode);
         }
 
         /// salvar transação GGR
@@ -428,7 +455,7 @@ trait Games2ApiTrait
         Helper::lossRollover($wallet, $betMoney);
 
         /// pagar afiliado
-        Helper::generateGameHistory($user->id, 'loss', $winMoney, $betMoney, $gameCode, $gameCode, $changeBonus, $providerCode);
+        Helper::generateGameHistory($user->id, 'loss', $winMoney, $betMoney, $changeBonus, $checkTransaction->transaction_id);
 
         return response()->json([
             'status' => 1,
@@ -493,7 +520,7 @@ trait Games2ApiTrait
         ]);
 
         if($order) {
-            return $order->id;
+            return $order;
         }
 
         return false;

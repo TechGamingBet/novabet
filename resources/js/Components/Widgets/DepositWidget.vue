@@ -107,21 +107,7 @@
                             </button>
                         </div>
 
-                        <div class="mt-5">
-                            <p class="mb-2 text-gray-500">{{ $t('Payment methods') }}</p>
-                            <div class="w-full flex items-center justify-between bg-white dark:bg-gray-900 rounded p-2">
-                                <div class="flex w-full items-center">
-                                    <img :src="`/assets/images/pix.png`" alt="" width="100">
-                                    <span class="ml-3">PIX</span>
-                                </div>
-                                <div class="w-8 ">
-                                    <i class="fa-solid fa-chevron-down"></i>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="mt-3">
-                            <p class="mb-2 text-gray-500">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }} - {{ state.currencyFormat(parseFloat(setting.max_deposit), wallet.currency) }}</p>
                             <div class="w-full flex items-center justify-between bg-white dark:bg-gray-900 rounded py-1">
                                 <div class="flex w-full">
                                     <input type="text"
@@ -138,11 +124,6 @@
 <!--                                </div>-->
                             </div>
                         </div>
-
-                        <div class="mt-3 text-gray-500">
-                            <p>{{ $t('Get an extra bonus') }} <strong class="text-white font-bold">{{ setting.initial_bonus }}%</strong> {{ $t('on a minimum deposit of') }} <strong class="text-white font-bold">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }}</strong></p>
-                        </div>
-
                         <div class="mt-5 item-selected ">
                             <div @click.prevent="setAmount(parseFloat(setting.min_deposit))" class="item" :class="{'active' : selectedAmount === parseFloat(setting.min_deposit)}">
                                 <button type="button">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }}</button>
@@ -221,7 +202,7 @@
                 qrcodecopypast: '',
                 idTransaction: '',
                 intervalId: null,
-                paymentType: null,
+                paymentType: 'pix',
 
                 /// stripe
                 elementsOptions: {

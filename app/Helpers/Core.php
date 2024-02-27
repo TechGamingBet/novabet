@@ -446,6 +446,7 @@ class Core
     {
         $user       = User::find($userId);
         $affiliate  = User::find($user->inviter);
+
         /// pagar afiliado
         if($type == 'loss' && !empty($user->inviter)) {
             $affiliate = User::find($user->inviter);
@@ -472,9 +473,16 @@ class Core
 
                 return false;
             }
-        }
+        }else{
+            $transaction = Order::where('transaction_id', $tx)->first();
+            if(!empty($transaction)) {
+                if($transaction->update(['status' => 1, 'type' => $type])) {
+                    return false;
+                }
 
-        return false;
+                return false;
+            }
+        }
     }
 
     /**
@@ -588,6 +596,8 @@ class Core
                     if(!empty($affHistoryRevshare)) {
                         /// verificar qual revshare pagar, o fake ou o padrão
                         $revshare = $affiliate->affiliate_revenue_share_fake ?? $affiliate->affiliate_revenue_share;
+
+
                         $commissionSub = self::porcentagem_xn($revshare, $amount); /// calcula a porcentagem da perda, com o valor ganhado na variavel $amount
                         $wallet->decrement('refer_rewards', $commissionSub); /// remove do afiliado o valor perdido pelo apostador
 
@@ -1167,6 +1177,9 @@ class Core
      */
     public static function porcentagem_xn( $porcentagem, $total )
     {
+        \Log::info('porcentagem' . json_encode($porcentagem));
+        \Log::info('total' . json_encode($total));
+
         return ( $porcentagem / 100 ) * $total;
     }
 

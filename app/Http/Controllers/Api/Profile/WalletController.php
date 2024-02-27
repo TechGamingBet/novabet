@@ -59,18 +59,29 @@ class WalletController extends Controller
 
         /// Verificar se é afiliado
         If(auth('api')->check()) {
-//            if(!empty(auth('api')->user()->inviter)) {
-//                return response()->json(['error' => 'Conta exclusiva para Operação de Jogador. Realize os saques na sua conta Âncora'], 400);
-//            }
-
 
             if($request->type === 'pix') {
                 $rules = [
                     'amount'        => ['required', 'numeric', 'min:'.$setting->min_withdrawal, 'max:'.$setting->max_withdrawal],
-                    'pix_key'       => 'required',
                     'pix_type'      => 'required',
                     'accept_terms'  => 'required',
                 ];
+
+                switch ($request->pix_type) {
+                    case 'document':
+                        $rules['pix_key'] = 'required|cpf_ou_cnpj';
+                        break;
+                    case 'email':
+                        $rules['pix_key'] = 'required|email';
+                        break;
+                    case 'phoneNumber':
+                        $rules['pix_key'] = 'required|telefone';
+                        break;
+                    default:
+                        $rules['pix_key'] = 'required';
+                        break;
+
+                }
             }
 
             if($request->type === 'bank') {

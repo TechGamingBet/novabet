@@ -7,7 +7,6 @@ use App\Models\Game;
 use App\Models\GamesKey;
 use App\Models\GGRGamesFiver;
 use App\Models\Order;
-use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Traits\Missions\MissionTrait;
@@ -244,7 +243,7 @@ trait FiversTrait
 
                 /// verificar se usuário tem desafio ativo
                 self::CheckMissionExist($request->user_code, $game, 'fivers');
-                return self::PrepareTransactions(
+                $transaction = self::PrepareTransactions(
                     $wallet,
                     $request->user_code,
                     $data['slot']['txn_id'],
@@ -253,6 +252,14 @@ trait FiversTrait
                     $data['slot']['game_code'],
                     $data['slot']['provider_code']
                 );
+                if($transaction) {
+
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'msg' => 'INSUFFICIENT_USER_FUNDS'
+                    ]);
+                }
             }
 
             if($data['game_type'] == 'live' &&  isset($data['live'])) {
@@ -260,7 +267,7 @@ trait FiversTrait
 
                 /// verificar se usuário tem desafio ativo
                 self::CheckMissionExist($request->user_code, $game, 'fivers');
-                return self::PrepareTransactions(
+                $transaction =  self::PrepareTransactions(
                     $wallet,
                     $request->user_code,
                     $data['live']['txn_id'],
@@ -269,6 +276,15 @@ trait FiversTrait
                     $data['live']['game_code'],
                     $data['live']['provider_code']
                 );
+
+                if($transaction) {
+
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'msg' => 'INSUFFICIENT_USER_FUNDS'
+                    ]);
+                }
             }
         }
 
@@ -312,35 +328,40 @@ trait FiversTrait
             }elseif($wallet->balance_withdrawal >= $bet) {
                 $wallet->decrement('balance_withdrawal', $bet); /// retira do saldo liberado pra saque
                 $changeBonus = 'balance_withdrawal'; /// define o tipo de transação
+            }else{
+                return false;
             }
 
             if(floatval($winMoney) > $bet) {
                 $typeAction = 'win';
-                self::CreateTransactions($userCode, time(), $txnId, $typeAction, $changeBonus, $bet, 'Fivers', $gameCode, $gameCode);
+                $transaction = self::CreateTransactions($userCode, time(), $txnId, $typeAction, $changeBonus, $bet, 'fivers', $gameCode, $gameCode);
 
-                /// salvar transação GGR
-                GGRGamesFiver::create([
-                    'user_id' => $userCode,
-                    'provider' => $providerCode,
-                    'game' => $gameCode,
-                    'balance_bet' => $betMoney,
-                    'balance_win' => $winMoney,
-                    'currency' => $wallet->currency
-                ]);
+                if(!empty($transaction)) {
 
-                /// pagar afiliado
-                Helper::generateGameHistory($user->id, $typeAction, $winMoney, $bet, $gameCode, $changeBonus, $providerCode, 'fivers');
+                    /// salvar transação GGR
+                    GGRGamesFiver::create([
+                        'user_id' => $userCode,
+                        'provider' => $providerCode,
+                        'game' => $gameCode,
+                        'balance_bet' => $betMoney,
+                        'balance_win' => $winMoney,
+                        'currency' => $wallet->currency
+                    ]);
 
-                return response()->json([
-                    'status' => 1,
-                    'user_balance' => $wallet->total_balance
-                ]);
+                    /// pagar afiliado
+                    Helper::generateGameHistory($user->id, $typeAction, $winMoney, $bet, $changeBonus, $txnId);
+
+                    return response()->json([
+                        'status' => 1,
+                        'user_balance' => $wallet->total_balance
+                    ]);
+                }
             }
 
             /// criar uma transação
             $checkTransaction = Order::where('transaction_id', $txnId)->first();
             if(empty($checkTransaction)) {
-                self::CreateTransactions($userCode, time(), $txnId, $typeAction, $changeBonus, $bet, 'Fivers', $gameCode, $gameCode);
+                $checkTransaction = self::CreateTransactions($userCode, time(), $txnId, $typeAction, $changeBonus, $bet, 'fivers', $gameCode, $gameCode);
             }
 
             /// salvar transação GGR
@@ -354,25 +375,13 @@ trait FiversTrait
             ]);
 
             Helper::lossRollover($wallet, $bet);
-
-            /// pagar afiliado
-            Helper::generateGameHistory($user->id, 'loss', $winMoney, $bet, $gameCode, $gameCode, $changeBonus, $providerCode);
+            Helper::generateGameHistory($user->id, $typeAction, $winMoney, $bet, $changeBonus, $checkTransaction->transaction_id);
 
             return response()->json([
                 'status' => 1,
                 'user_balance' => $wallet->total_balance
             ]);
         }
-    }
-
-    private static function SetGameStart($request)
-    {
-
-    }
-
-    private static function SetGameEnd($request)
-    {
-
     }
 
     /**
@@ -387,10 +396,6 @@ trait FiversTrait
                 return self::GetBalanceInfo($request);
             case "transaction":
                 return self::SetTransaction($request);
-            case "game_start":
-                return self::SetGameStart($request);
-            case "game_end":
-                return self::SetGameEnd($request);
             default:
                 return response()->json(['status' => 0]);
         }
@@ -420,11 +425,8 @@ trait FiversTrait
             'round_id'      => 1,
         ]);
 
-        \Log::info('Order X: '. $order);
-
-
         if($order) {
-            return $order->id;
+            return $order;
         }
 
         return false;

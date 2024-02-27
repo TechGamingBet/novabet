@@ -83,12 +83,6 @@
                         <span class="text-[12px] mt-2">{{ $t('Wallet') }}</span>
                     </RouterLink>
                 </div>
-                <div>
-                    <RouterLink :to="{ name: 'favoritePage' }" active-class="category-active" class="site-menu-item flex flex-col items-center justify-center text-center p-3 rounded-xl">
-                        <img :src="`/assets/images/icons/folder-favourite.svg`" alt="" width="35">
-                        <span class="text-[12px] mt-2">{{ $t('Favorites') }}</span>
-                    </RouterLink>
-                </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4 mt-4">

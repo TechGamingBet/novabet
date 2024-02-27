@@ -5,7 +5,7 @@ namespace App\Traits\Providers;
 use App\Helpers\Core as Helper;
 use App\Models\Game;
 use App\Models\GamesKey;
-use App\Models\GGRGamesFiver;
+use App\Models\GgrGamesWorldSlot;
 use App\Models\Order;
 use App\Models\Provider;
 use App\Models\Transaction;
@@ -20,6 +20,7 @@ trait WorldSlotTrait
     use MissionTrait;
 
     /**
+     * 456
      * @dev victormsalatiel - Corra de golpista, me chame no instagram
      * @var string
      */
@@ -251,36 +252,36 @@ trait WorldSlotTrait
         $changeBonus = 'balance';
         $bet = floatval($betMoney);
 
-        \Log::info('INICIOU APOSTA: '. $bet);
 
         /// deduz o saldo apostado
         if($wallet->balance_bonus > $bet) {
             $wallet->decrement('balance_bonus', $bet); /// retira do bonus
             $changeBonus = 'balance_bonus'; /// define o tipo de transação
 
-        }elseif($wallet->balance >= $bet) {
+        }elseif($wallet->balance > $bet) {
             $wallet->decrement('balance', $bet); /// retira do saldo depositado
             $changeBonus = 'balance'; /// define o tipo de transação
 
-        }elseif($wallet->balance_withdrawal >= $bet) {
+        }elseif($wallet->balance_withdrawal > $bet) {
             $wallet->decrement('balance_withdrawal', $bet); /// retira do saldo liberado pra saque
             $changeBonus = 'balance_withdrawal'; /// define o tipo de transação
+        }else{
+            return false;
         }
 
-        \Log::info('APOSTA DO TIPO: '. $changeBonus);
 
         /// criar uma transação
         $transaction = self::CreateTransactionsWorldSlot($userCode, time(), $txnId, $typeAction, $changeBonus, $bet, $gameCode, $gameCode);
 
         if($transaction) {
             /// salvar transação GGR
-            GGRGamesFiver::create([
+            GgrGamesWorldSlot::create([
                 'user_id' => $userCode,
                 'provider' => $providerCode,
                 'game' => $gameCode,
                 'balance_bet' => $bet,
                 'balance_win' => 0,
-                'currency' => $wallet->currencyS
+                'currency' => $wallet->currency
             ]);
 
             return $transaction;
@@ -380,6 +381,15 @@ trait WorldSlotTrait
             $transaction = Order::where('transaction_id', $data[$type]['txn_id'])->where('type', 'bet')->first();
             if(!empty($transaction)) {
                 if(floatval($data[$type]['win']) > 0) {
+                    GgrGamesWorldSlot::create([
+                        'user_id' => $data[$type]['game_code'],
+                        'provider' => $data[$type]['provider_code'],
+                        'game' => $data[$type]['win'],
+                        'balance_bet' => $transaction->amount,
+                        'balance_win' => 0,
+                        'currency' => $wallet->currency
+                    ]);
+
                     Helper::generateGameHistory(
                         $wallet->user_id,
                         'win',
@@ -463,6 +473,11 @@ trait WorldSlotTrait
                     return response()->json([
                         'status' => 1,
                         'user_balance' => $wallet->total_balance,
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'msg' => 'INSUFFICIENT_USER_FUNDS'
                     ]);
                 }
             }
