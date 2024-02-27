@@ -46,13 +46,6 @@
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                                             <i class="fa-regular fa-lock text-success-emphasis"></i>
                                         </div>
-                                        <input :type="typeInputPassword"
-                                               name="password_confirmation"
-                                               v-model="form.password_confirmation"
-                                               class="input-group pr-[40px]"
-                                               :placeholder="$t('Confirm the Password')"
-                                               required
-                                        >
                                         <button type="button" @click.prevent="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3.5">
                                             <i v-if="typeInputPassword === 'password'" class="fa-regular fa-eye"></i>
                                             <i v-if="typeInputPassword === 'text'" class="fa-sharp fa-regular fa-eye-slash"></i>
