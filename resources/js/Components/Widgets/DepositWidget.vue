@@ -107,19 +107,6 @@
                             </button>
                         </div>
 
-                        <div class="mt-5">
-                            <p class="mb-2 text-gray-500">{{ $t('Payment methods') }}</p>
-                            <div class="w-full flex items-center justify-between bg-white dark:bg-gray-900 rounded p-2">
-                                <div class="flex w-full items-center">
-                                    <img :src="`/assets/images/pix.png`" alt="" width="100">
-                                    <span class="ml-3">PIX</span>
-                                </div>
-                                <div class="w-8 ">
-                                    <i class="fa-solid fa-chevron-down"></i>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="mt-3">
                             <p class="mb-2 text-gray-500">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }} - {{ state.currencyFormat(parseFloat(setting.max_deposit), wallet.currency) }}</p>
                             <div class="w-full flex items-center justify-between bg-white dark:bg-gray-900 rounded py-1">
