@@ -108,7 +108,6 @@
                         </div>
 
                         <div class="mt-3">
-                            <p class="mb-2 text-gray-500">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }} - {{ state.currencyFormat(parseFloat(setting.max_deposit), wallet.currency) }}</p>
                             <div class="w-full flex items-center justify-between bg-white dark:bg-gray-900 rounded py-1">
                                 <div class="flex w-full">
                                     <input type="text"
