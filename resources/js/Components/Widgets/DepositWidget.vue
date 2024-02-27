@@ -221,7 +221,7 @@
                 qrcodecopypast: '',
                 idTransaction: '',
                 intervalId: null,
-                paymentType: null,
+                paymentType: 'pix',
 
                 /// stripe
                 elementsOptions: {

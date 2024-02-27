@@ -704,7 +704,6 @@ export default {
 
                         _this.modalRegister.toggle();
                         _this.router.push({ name: 'profileDeposit' });
-                        _toast.success(_this.$t('Your account has been created successfully'));
                     }
 
                     _this.isLoadingRegister = false;
