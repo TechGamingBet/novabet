@@ -124,11 +124,6 @@
 <!--                                </div>-->
                             </div>
                         </div>
-
-                        <div class="mt-3 text-gray-500">
-                            <p>{{ $t('Get an extra bonus') }} <strong class="text-white font-bold">{{ setting.initial_bonus }}%</strong> {{ $t('on a minimum deposit of') }} <strong class="text-white font-bold">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }}</strong></p>
-                        </div>
-
                         <div class="mt-5 item-selected ">
                             <div @click.prevent="setAmount(parseFloat(setting.min_deposit))" class="item" :class="{'active' : selectedAmount === parseFloat(setting.min_deposit)}">
                                 <button type="button">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }}</button>
