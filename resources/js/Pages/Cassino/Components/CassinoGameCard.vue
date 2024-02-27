@@ -1,7 +1,7 @@
 <template>
     <div class="item-game text-gray-700 w-full h-auto mr-4 cursor-pointer">
         <RouterLink v-if="game.distribution === 'kagaming'" :to="{ name: 'casinoPlayPage', params: { id: game.id, slug: game.game_code }}">
-            <img :src="game.cover" alt="" class="w-full">
+            <img :src="game.cover" alt="" style="border-radius: 1rem 1rem 0rem 0rem;" class="w-full">
         </RouterLink>
         <RouterLink v-else :to="{ name: 'casinoPlayPage', params: { id: game.id, slug: game.game_code }}">
             <img :src="`/storage/`+game.cover" alt="" class="w-full ">
