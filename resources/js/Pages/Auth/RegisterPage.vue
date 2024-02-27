@@ -109,21 +109,6 @@
                                     </div>
 
                                     <hr class="mb-3 mt-2 dark:border-gray-600">
-
-                                    <div class="mb-3 mt-11">
-                                        <div class="flex">
-                                            <input id="term-a" v-model="registerForm.term_a" name="term_a" required type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="term-a" class="ml-2 text-sm font-medium text-left text-gray-900 dark:text-gray-300">{{ $t('I agree to the User Agreement & confirm I am at least 18 years old') }}</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <div class="flex items-center">
-                                            <input id="term-agreement" v-model="registerForm.agreement" name="term_b" required type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="term-agreement" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $t('I agree with the') }} <a href="#" class="text-primary hover:underline">{{ $t('terms and conditions') }}</a>.</label>
-                                        </div>
-                                    </div>
-
                                     <div class="mt-5 w-full">
                                         <button type="submit" class="ui-button-blue rounded w-full mb-3">
                                             {{ $t('Register') }}
