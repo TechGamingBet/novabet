@@ -1,6 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Adicione a regra de exclusão para /storage/ aqui
+    RewriteRule ^storage/(.*)$ - [L,NC]
+
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
