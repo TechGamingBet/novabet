@@ -226,20 +226,6 @@
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-300 mb-6">Novo por aqui? <a href="" @click.prevent="hideLoginShowRegisterToggle"><strong>Criar conta</strong></a></p>
                     </form>
-
-                    <div class="login-wrap mt-5">
-                        <div class="line-text">
-                            <div class="l"></div>
-                            <div class="t">{{ $t('Log in directly with') }}</div>
-                            <div class="l"></div>
-                        </div>
-
-                        <div class="social-group mt-3">
-                            <a :href="redirectSocialTo()" class="text-green-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800">
-                                <i class="fa-brands fa-google"></i>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
