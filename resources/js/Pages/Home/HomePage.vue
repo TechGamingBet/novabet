@@ -11,7 +11,7 @@
             <!-- Banners carousel -->
             <div class="carousel-banners">
                 <div class="md:w-4/6 2xl:w-4/6 mx-auto 2xl:p-4">
-                    <div class="mb-5">
+                    <div class="mb-1">
                         <Carousel v-bind="settings" :breakpoints="breakpoints" ref="carouselBanner">
                             <Slide v-for="(banner, index) in banners" :key="index">
                                 <div class="carousel__item rounded w-full">
@@ -27,7 +27,7 @@
 
             <div class="md:w-4/6 2xl:w-4/6 mx-auto p-4">
                 <!-- Searchbar action -->
-                <div class="mb-5 cursor-pointer w-full">
+                <div class="mb-1 cursor-pointer w-full">
                     <div class="flex">
                         <div class="relative w-full">
                             <input @click.prevent="toggleSearch" type="search"
