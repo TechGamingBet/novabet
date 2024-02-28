@@ -31,7 +31,6 @@
 
 
                     <div v-if="isAuthenticated" class="flex items-center">
-                        <WalletBalance />
                         <MakeDeposit :showMobile="true" :title="$t('Deposit')" />
 
                         <div class="flex items-center ml-3">
