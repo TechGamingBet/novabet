@@ -1,5 +1,5 @@
 <template>
-    <button @click.prevent="toggleModalDeposit" type="button" :class="[showMobile === false ? 'hidden md:block' : '', isFull ? 'w-full' : '']" class="ui-button-blue mr-3 rounded">
+    <button @click.prevent="toggleModalDeposit" type="button" :class="[showMobile === false ? 'hidden md:block' : '', isFull ? 'w-full' : '']" class="ui-button-blue mr-1.5 rounded">
         {{ title }}
     </button>
 
