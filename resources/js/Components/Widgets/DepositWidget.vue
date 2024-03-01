@@ -127,17 +127,14 @@
                         <div class="mt-5 item-selected ">
                             <div @click.prevent="setAmount(parseFloat(setting.min_deposit))" class="item" :class="{'active' : selectedAmount === parseFloat(setting.min_deposit)}">
                                 <button type="button">{{ state.currencyFormat(parseFloat(setting.min_deposit), wallet.currency) }}</button>
-                                <div v-if="selectedAmount === parseFloat(setting.min_deposit)" class="ratio">+{{ setting.initial_bonus }}%</div>
                                 <img v-if="selectedAmount === parseFloat(setting.min_deposit)" class="img-check" :src="`/assets/images/check.webp`" alt="">
                             </div>
                             <div @click.prevent="setAmount(50.00)" class="item" :class="{'active' : selectedAmount === 50.00}">
                                 <button type="button">{{ wallet.symbol }} 50,00</button>
-                                <div v-if="selectedAmount === 50.00" class="ratio">+{{ setting.initial_bonus }}%</div>
                                 <img v-if="selectedAmount === 50.00" class="img-check" :src="`/assets/images/check.webp`" alt="">
                             </div>
                             <div @click.prevent="setAmount(200.00)" class="item" :class="{'active' : selectedAmount === 200.00}">
                                 <button type="button">{{ wallet.symbol }} 200,00</button>
-                                <div v-if="selectedAmount === 200.00" class="ratio">+{{ setting.initial_bonus }}%</div>
                                 <img v-if="selectedAmount === 200.00" class="img-check" :src="`/assets/images/check.webp`" alt="">
                             </div>
                         </div>

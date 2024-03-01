@@ -10,8 +10,8 @@
 
             <!-- Banners carousel -->
             <div class="carousel-banners">
-                <div class="md:w-4/6 2xl:w-4/6 mx-auto p-4">
-                    <div class="mb-5">
+                <div class="md:w-4/6 2xl:w-4/6 mx-auto 2xl:p-4">
+                    <div class="mb-1">
                         <Carousel v-bind="settings" :breakpoints="breakpoints" ref="carouselBanner">
                             <Slide v-for="(banner, index) in banners" :key="index">
                                 <div class="carousel__item rounded w-full">
@@ -20,34 +20,6 @@
                                     </a>
                                 </div>
                             </Slide>
-
-                            <template #addons>
-                                <navigation>
-                                    <template #next>
-                                        <i class="fa-solid fa-chevron-right text-white"></i>
-                                    </template>
-                                    <template #prev>
-                                        <i class="fa-solid fa-chevron-left text-white"></i>
-                                    </template>
-                                </navigation>
-                                <Pagination />
-                            </template>
-                        </Carousel>
-                    </div>
-
-                    <div class="">
-                        <Carousel v-bind="settingsRecommended" :breakpoints="breakpointsRecommended" ref="carouselSubBanner">
-                            <Slide v-for="(banner, index) in bannersHome" :key="index">
-                                <div class="carousel__item  min-h-[60px] md:min-h-[150px] rounded w-full mr-4">
-                                    <a :href="banner.link" class="w-full h-full rounded">
-                                        <img :src="`/storage/`+banner.image" alt="" class="h-full w-full rounded">
-                                    </a>
-                                </div>
-                            </Slide>
-
-                            <template #addons>
-                                <Pagination />
-                            </template>
                         </Carousel>
                     </div>
                 </div>
@@ -55,7 +27,7 @@
 
             <div class="md:w-4/6 2xl:w-4/6 mx-auto p-4">
                 <!-- Searchbar action -->
-                <div class="mb-5 cursor-pointer w-full">
+                <div class="mb-1 cursor-pointer w-full">
                     <div class="flex">
                         <div class="relative w-full">
                             <input @click.prevent="toggleSearch" type="search"
@@ -70,20 +42,6 @@
                                 </svg>
                                 <span class="sr-only">Search</span>
                             </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- categories -->
-                <div v-if="categories" class="category-list">
-                    <div class="flex mb-5 gap-4" style="max-height: 200px; overflow-x: auto; overflow-y: hidden;">
-                        <div class="flex flex-row justify-between items-center w-full" style="min-width: 100%; white-space: nowrap;">
-                            <RouterLink :to="{ name: 'casinosAll', params: { provider: 'all', category: category.slug }}" v-for="(category, index) in categories" class="flex flex-col justify-center items-center min-w-[80px] text-center">
-                                <div class="category-img">
-                                    <img :src="`/storage/`+category.image" alt="" width="35" class="">
-                                </div>
-                                <p class="mt-3">{{ $t(category.name) }}</p>
-                            </RouterLink>
                         </div>
                     </div>
                 </div>
@@ -108,21 +66,6 @@
 
                 <div class="mt-5">
                     <ShowProviders v-for="(provider, index) in providers" :provider="provider" :index="index" />
-                </div>
-
-                <div v-if="isAuthenticated" class="flex items-center justify-center h-48 mb-4">
-                    <div class="grid py-4">
-                        <h1 class="text-lg font-bold mb-3 text-center">{{ $t('PREFERRED PAYMENT METHOD') }}</h1>
-                        <div class="payment-list flex items-center">
-                            <img :src="`/assets/images/icons/pix.svg`" alt="" width="128">
-
-                            <div class="divider"></div>
-
-                            <div>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

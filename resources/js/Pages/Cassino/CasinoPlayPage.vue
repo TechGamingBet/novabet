@@ -2,7 +2,7 @@
     <GameLayout>
         <LoadingComponent :isLoading="isLoading">
             <div class="text-center">
-                <span>{{ $t('Loading game information') }}</span>
+                <span>Carregando informações do Jogo</span>
             </div>
         </LoadingComponent>
 
