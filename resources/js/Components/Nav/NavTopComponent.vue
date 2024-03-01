@@ -33,8 +33,6 @@
                     <div v-if="isAuthenticated" class="flex items-center">
                         <WalletBalance />
                         <MakeDeposit :showMobile="false" :title="$t('Deposit')" />
-                        <LanguageSelector />
-                        <DropdownDarkLight/>
 
                         <div class="flex items-center ml-3">
                             <div>
